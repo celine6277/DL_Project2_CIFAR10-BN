@@ -23,15 +23,23 @@ class PartialDataset(Dataset):
         return min(self.n_items, len(self.dataset))
 
 
-def get_cifar_loader(root='../data/', batch_size=128, train=True, shuffle=True, num_workers=4, n_items=-1):
-    normalize = transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                                     std=[0.5, 0.5, 0.5])
+def get_cifar_loader(root='./data/', batch_size=128, train=True, shuffle=True, num_workers=4, n_items=-1):
+    if train:
+        # 训练集：加入随机裁剪和水平翻转
+        transform = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
+    else:
+        # 测试集：只做标准化，绝对不能做增强
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
 
-    data_transforms = transforms.Compose(
-        [transforms.ToTensor(),
-        normalize])
-
-    dataset = datasets.CIFAR10(root=root, train=train, download=True, transform=data_transforms)
+    dataset = datasets.CIFAR10(root=root, train=train, download=False, transform=transform)
     if n_items > 0:
         dataset = PartialDataset(dataset, n_items)
 

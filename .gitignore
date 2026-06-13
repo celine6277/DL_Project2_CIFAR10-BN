@@ -10,3 +10,4 @@
 
 # 4. 取消忽略 .gitignore 文件本身（把它也传上 github 是个好习惯）
 !.gitignore
+.ipynb_checkpoints

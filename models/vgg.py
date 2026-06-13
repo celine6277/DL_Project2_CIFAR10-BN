@@ -252,3 +252,4 @@ if __name__ == '__main__':
     print(get_number_of_parameters(VGG_A()))
     print(get_number_of_parameters(VGG_A_Light()))
     print(get_number_of_parameters(VGG_A_Dropout()))
+    print(get_number_of_parameters(VGG_A_BatchNorm()))
